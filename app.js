@@ -1,36 +1,74 @@
 var express = require("express");
+
 var app = express();
+
 var bodyparser = require("body-parser");
-app.use(bodyparser.urlencoded({extended: true}));
-app.set("view engine", "ejs");
-var campgrounds = [
-    {name: "Salmon Creek", image: "https://cdn.grindtv.com/uploads/2015/02/shutterstock_242371765.jpg"},
-    {name: "Granite Hill", image: "http://jaguarccc.co.uk/wp-content/uploads/2016/12/about.jpg"},
-    {
-        name: "Mountain Goat's Rest",
-        image: "http://s3.amazonaws.com/digitaltrends-uploads-prod/2017/06/camping-tent-1500x1000.png"
-    }
-];
+
+var mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/yelp_camp");
+
+app.use(bodyparser.urlencoded({extended: true})); // To initialize bodyparser
+
+app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
+
+// Schema Setup
+var campgroundSchema = new mongoose.Schema({
+    // BluePrint for the database
+    name: String,
+    image: String
+});
+
+var Campground = mongoose.model("Campground", campgroundSchema); // compiling the schema into a model
+// Campground.create(
+//     {
+//         name: "Mountain Goat's Rest",
+//         image: "http://s3.amazonaws.com/digitaltrends-uploads-prod/2017/06/camping-tent-1500x1000.png"
+//     }, function (err, campground) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             console.log("Newly Created CAMPGROUND");
+//         }
+//     }
+// );
+
+
 app.get("/", function (req, res) {
     res.render("landing");
 });
 
 app.get("/campgrounds", function (req, res) {
-
-    res.render("campgrounds", {campgrounds: campgrounds})
+    // Find all the campgrounds from the DataBase
+    Campground.find({}, function (err, allCampgrounds) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("campgrounds", {campgrounds: allCampgrounds})
+        }
+    });
 });
 
 app.post("/campgrounds", function (req, res) {
     var name = req.body.name;
     var image = req.body.image;
     var newCampground = {name: name, image: image};
-    campgrounds.push(newCampground);
-    res.redirect("/campgrounds");
+    // Create a new campground with the database
+    Campground.create(newCampground, function (err, newlyCreated) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect("/campgrounds");
+        }
+    });
+    // campgrounds.push(newCampground);
+
 });
 
 app.get("/campgrounds/new", function (req, res) {
     res.render("new");
-})
+});
+
 app.listen(3000, function () {
     console.log("Yelp Camp Server Has Started");
 });
