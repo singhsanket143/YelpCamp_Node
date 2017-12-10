@@ -10,13 +10,13 @@ var Campground = require('./models/campgrounds');
 
 var seedDB = require('./seeds');
 
-seedDB;
 mongoose.connect("mongodb://localhost/yelp_camp");
 
 app.use(bodyparser.urlencoded({extended: true})); // To initialize bodyparser
 
 app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
 
+seedDB;
 
 // compiling the schema into a model
 // Campground.create(
@@ -72,7 +72,7 @@ app.get("/campgrounds/new", function (req, res) {
 });
 
 app.get("/campgrounds/:id",function (req,res) {
-    Campground.findById(req.params.id,function (err, foundCampground) {
+    Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) {
         if(err){
             console.log(err);
         } else {

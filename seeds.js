@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var Campground = require('./models/campgrounds');
-var comment = require(',/models/comments');
+var Comment = require('./models/comments');
 var data = [
     {
         name: 'Clouds Rest',
@@ -43,7 +43,7 @@ function seedDB() {
                                 campground.save();
                                 console.log("Created a new comment");
                             }
-                        })
+                        });
                     }
                 });
             });
