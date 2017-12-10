@@ -6,21 +6,16 @@ var bodyparser = require("body-parser");
 
 var mongoose = require("mongoose");
 
+var Campground = require('./models/campgrounds');
+
 mongoose.connect("mongodb://localhost/yelp_camp");
 
 app.use(bodyparser.urlencoded({extended: true})); // To initialize bodyparser
 
 app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
 
-// Schema Setup
-var campgroundSchema = new mongoose.Schema({
-    // BluePrint for the database
-    name: String,
-    image: String,
-    description: String
-});
 
-var Campground = mongoose.model("Campground", campgroundSchema); // compiling the schema into a model
+// compiling the schema into a model
 // Campground.create(
 //     {
 //         name: "Granite Hill",
