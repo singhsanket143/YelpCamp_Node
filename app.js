@@ -8,6 +8,9 @@ var mongoose = require("mongoose");
 
 var Campground = require('./models/campgrounds');
 
+var seedDB = require('./seeds');
+
+seedDB;
 mongoose.connect("mongodb://localhost/yelp_camp");
 
 app.use(bodyparser.urlencoded({extended: true})); // To initialize bodyparser
