@@ -10,6 +10,12 @@ var Campground = require('./models/campgrounds');
 
 var Comment = require('./models/comments');
 
+var passport = require('passport');
+
+var localStratergy = require('passport-local');
+
+var User = require('./models/user');
+
 var seedDB = require('./seeds');
 
 mongoose.connect("mongodb://localhost/yelp_camp");
@@ -21,6 +27,18 @@ app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
 app.use(express.static(__dirname+"/public"));
 
 seedDB;
+
+// PassPort config
+app.use(require("express-session")({
+    secret: 'Ruby on rails is better than node.js',
+    resave:false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStratergy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // compiling the schema into a model
 Campground.create(
@@ -114,6 +132,23 @@ app.post("/campgrounds/:id/comments",function (req,res) {
                     campground.save();
                     res.redirect('/campgrounds/'+campground._id);
                 }
+            });
+        }
+    });
+});
+
+// Auth routes
+app.get('/register',function (req,res) {
+    res.render("register");
+});
+app.post('/register',function (req,res) {
+    User.register(new User({username: req.body.username}),req.body.password,function (err,user) {
+        if(err){
+            console.log(err);
+            return res.render("register");
+        }else {
+            passport.authenticate("local")( req,res,function () {
+                res.redirect("/campgrounds");
             });
         }
     });
