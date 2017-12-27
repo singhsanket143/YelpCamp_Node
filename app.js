@@ -18,6 +18,8 @@ app.use(bodyparser.urlencoded({extended: true})); // To initialize bodyparser
 
 app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
 
+app.use(express.static(__dirname+"/public"));
+
 seedDB;
 
 // compiling the schema into a model
