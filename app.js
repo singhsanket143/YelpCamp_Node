@@ -19,19 +19,19 @@ app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
 seedDB;
 
 // compiling the schema into a model
-// Campground.create(
-//     {
-//         name: "Granite Hill",
-//         image: "http://s3.amazonaws.com/digitaltrends-uploads-prod/2017/06/camping-tent-1500x1000.png",
-//         description: "This is a huge Granite hill, no Bathrooms, no water. Beautiful Granite!"
-//     }, function (err, campground) {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             console.log("Newly Created CAMPGROUND");
-//         }
-//     }
-// );
+Campground.create(
+    {
+        name: "Sanket Singh",
+        image: "http://s3.amazonaws.com/digitaltrends-uploads-prod/2017/06/camping-tent-1500x1000.png",
+        description: "This is a huge Granite hill, no Bathrooms, no water. Beautiful Granite!"
+    }, function (err, campground) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Newly Created CAMPGROUND");
+        }
+    }
+);
 
 
 app.get("/", function (req, res) {
@@ -79,7 +79,6 @@ app.get("/campgrounds/:id",function (req,res) {
             res.render("campgrounds/show",{campground: foundCampground});
         }
     })
-
 });
 
 // ===============
