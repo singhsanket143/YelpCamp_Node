@@ -22,7 +22,9 @@ var seedDB = require('./seeds');
 
 var flash = require('connect-flash');
 
-mongoose.connect("mongodb://localhost/yelp_camp");
+// mongoose.connect("mongodb://localhost/yelp_camp");
+mongoose.connect("mongodb://singhsanket:singhsanket@ds131997.mlab.com:31997/yelpcamp_sanket");
+//mongodb://singhsanket:Pr@tibha123@ds131997.mlab.com:31997/yelpcamp_sanket
 
 app.use(bodyparser.urlencoded({extended: true})); // To initialize bodyparser
 
