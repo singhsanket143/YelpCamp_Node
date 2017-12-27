@@ -64,7 +64,7 @@ Campground.create(
 
 app.use(indexRoutes);
 app.use(commentRoutes);
-app.use(campgroundRoutes);
+app.use("/campgrounds",campgroundRoutes);
 app.listen(3000, function () {
     console.log("Yelp Camp Server Has Started");
 });

@@ -1,8 +1,10 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 var Campground = require('../models/campgrounds');
 var Comment = require('../models/comments');
-router.get("/campgrounds", function (req, res) {
+
+
+router.get("/", function (req, res) {
     // Find all the campgrounds from the DataBase
     Campground.find({}, function (err, allCampgrounds) {
         if (err) {
@@ -13,7 +15,7 @@ router.get("/campgrounds", function (req, res) {
     });
 });
 
-router.post("/campgrounds", function (req, res) {
+router.post("/", function (req, res) {
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
@@ -31,11 +33,11 @@ router.post("/campgrounds", function (req, res) {
 });
 
 // Show form to create new campground
-router.get("/campgrounds/new", function (req, res) {
+router.get("/new", function (req, res) {
     res.render("campgrounds/new");
 });
 
-router.get("/campgrounds/:id", function (req, res) {
+router.get("/:id", function (req, res) {
     Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) {
         if (err) {
             console.log(err);
