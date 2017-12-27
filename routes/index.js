@@ -33,6 +33,7 @@ router.post("/login",passport.authenticate("local",{
 // logout logic
 router.get('/logout',function (req,res) {
     req.logout();
+    req.flash("success","Logged You Out!! Hope To See You Soon");
     res.redirect("/campgrounds")
 });
 
