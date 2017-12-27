@@ -26,6 +26,8 @@ app.set("view engine", "ejs"); // To set the default html embedded enjine to ejs
 
 app.use(express.static(__dirname+"/public"));
 
+
+
 seedDB;
 
 // PassPort config
@@ -39,7 +41,10 @@ app.use(passport.session());
 passport.use(new localStratergy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
+app.use(function (req,res,next) {
+    res.locals.currentUser=req.user;
+    next();
+});
 // compiling the schema into a model
 Campground.create(
     {
@@ -66,7 +71,7 @@ app.get("/campgrounds", function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render("campgrounds/index", {campgrounds: allCampgrounds})
+            res.render("campgrounds/index", {campgrounds: allCampgrounds, currentUser: req.user})
         }
     });
 });
