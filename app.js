@@ -30,7 +30,7 @@ var campgroundRoutes = require('./routes/campgrounds');
 var commentRoutes = require('./routes/comments');
 var indexRoutes = require('./routes/index');
 
-seedDB;
+// seedDB;
 
 // PassPort config
 app.use(require("express-session")({
@@ -48,19 +48,19 @@ app.use(function (req, res, next) {
     next();
 });
 // compiling the schema into a model
-Campground.create(
-    {
-        name: "Sanket Singh",
-        image: "http://s3.amazonaws.com/digitaltrends-uploads-prod/2017/06/camping-tent-1500x1000.png",
-        description: "This is a huge Granite hill, no Bathrooms, no water. Beautiful Granite!"
-    }, function (err, campground) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("Newly Created CAMPGROUND");
-        }
-    }
-);
+// Campground.create(
+//     {
+//         name: "Sanket Singh",
+//         image: "http://s3.amazonaws.com/digitaltrends-uploads-prod/2017/06/camping-tent-1500x1000.png",
+//         description: "This is a huge Granite hill, no Bathrooms, no water. Beautiful Granite!"
+//     }, function (err, campground) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             console.log("Newly Created CAMPGROUND");
+//         }
+//     }
+// );
 
 app.use(indexRoutes);
 app.use(commentRoutes);
