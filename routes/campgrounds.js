@@ -53,18 +53,28 @@ router.get("/:id", function (req, res) {
 
 // Edit Campground
 router.get("/:id/edit",function (req, res) {
-    Campground.findById(req.params.id, function (err, foundCampground) {
-        if(err) {
-            res.render("/campgrounds");
-        } else {
-            res.render("campgrounds/edit",{campground: foundCampground});
-        }
-    });
+    if(req.isAuthenticated()){
+        Campground.findById(req.params.id, function (err, foundCampground) {
+            if(err) {
+                res.redirect("back");
+            } else {
+                if(foundCampground.author.id.equals(req.user._id)){
+                    res.render("campgrounds/edit",{campground: foundCampground});
+                } else {
+                    res.redirect("back");
+                }
+
+            }
+        });
+    } else {
+        res.redirect("back");
+    }
+
 });
 
 
 // Update Campground
-router.put("/:id",function (req,res) {
+router.put("/:id",checkCampgroundOwnerShip,function (req,res) {
 
     Campground.findByIdAndUpdate(req.params.id,req.body.campground,function (err,updatedCampground) {
         if(err){
@@ -75,7 +85,7 @@ router.put("/:id",function (req,res) {
     })
 });
 // Destroy
-router.delete("/:id",function (req,res) {
+router.delete("/:id",checkCampgroundOwnerShip,function (req,res) {
     Campground.findByIdAndRemove(req.params.id,function (err) {
         if(err){
             res.redirect("/campgrounds");
@@ -91,5 +101,22 @@ function isLoggedIn(req, res, next) {
     }
     res.redirect("/login");
 }
+function checkCampgroundOwnerShip(req,res,next) {
+    if(req.isAuthenticated()){
+        Campground.findById(req.params.id, function (err, foundCampground) {
+            if(err) {
+                res.redirect("back");
+            } else {
+                if(foundCampground.author.id.equals(req.user._id)){
+                    next();
+                } else {
+                    res.redirect("back");
+                }
 
+            }
+        });
+    } else {
+        res.redirect("bcak");
+    }
+}
 module.exports = router;
