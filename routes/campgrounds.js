@@ -116,7 +116,7 @@ function checkCampgroundOwnerShip(req,res,next) {
             }
         });
     } else {
-        res.redirect("bcak");
+        res.redirect("back");
     }
 }
 module.exports = router;
