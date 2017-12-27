@@ -56,17 +56,20 @@ router.get("/:id/edit",function (req, res) {
     if(req.isAuthenticated()){
         Campground.findById(req.params.id, function (err, foundCampground) {
             if(err) {
+                req.flash("error","OOPS!!! Something went wrong :-p");
                 res.redirect("back");
             } else {
                 if(foundCampground.author.id.equals(req.user._id)){
                     res.render("campgrounds/edit",{campground: foundCampground});
                 } else {
+                    req.flash("error","You Don't Have Permissions To Do That");
                     res.redirect("back");
                 }
 
             }
         });
     } else {
+        req.flash("error","You need to be logged in to do that");
         res.redirect("back");
     }
 
@@ -78,8 +81,10 @@ router.put("/:id",middleWare.checkCampgroundOwnerShip,function (req,res) {
 
     Campground.findByIdAndUpdate(req.params.id,req.body.campground,function (err,updatedCampground) {
         if(err){
+            req.flash("error","OOPS!! Something Went Wrong. Please Try Again");
             res.redirect("/campgrounds");
         } else {
+            req.flash("success","You successfully updated the campground");
             res.redirect("/campgrounds/"+ req.params.id);
         }
     })
@@ -95,11 +100,6 @@ router.delete("/:id",middleWare.checkCampgroundOwnerShip,function (req,res) {
     });
 });
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
+
 
 module.exports = router;
